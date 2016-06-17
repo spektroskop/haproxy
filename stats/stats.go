@@ -43,7 +43,7 @@ type Field interface {
 	Value(string) (interface{}, error)
 }
 
-// Fields ..
+// FieldMap ..
 type FieldMap map[string]Field
 
 // TextField ..
