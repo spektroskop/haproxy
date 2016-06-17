@@ -43,6 +43,9 @@ type Field interface {
 	Value(string) (interface{}, error)
 }
 
+// Fields ..
+type FieldMap map[string]Field
+
 // TextField ..
 type TextField string
 
@@ -70,33 +73,9 @@ func (f NumberField) Value(v string) (interface{}, error) {
 }
 
 // Fields ..
-var Fields = map[string]Field{
-	"svname":         TextField("name"),
-	"pxname":         TextField("proxy"),
-	"qcur":           NumberField("currentQueued"),
-	"scur":           NumberField("currentSessions"),
-	"rate":           NumberField("sessionRate"),
-	"qtime":          NumberField("queueTime"),
-	"ctime":          NumberField("connectTime"),
-	"rtime":          NumberField("responseTime"),
-	"bin":            NumberField("received"),
-	"bout":           NumberField("sent"),
-	"req_rate":       NumberField("httpRequestRate"),
-	"hrsp_1xx":       NumberField("httpResponse1xx"),
-	"hrsp_2xx":       NumberField("httpResponse2xx"),
-	"hrsp_3xx":       NumberField("httpResponse3xx"),
-	"hrsp_4xx":       NumberField("httpResponse4xx"),
-	"hrsp_5xx":       NumberField("httpResponse5xx"),
-	"hrsp_other":     NumberField("httpResponseOther"),
-	"status":         TextField("status"),
-	"weight":         NumberField("weight"),
-	"lbtot":          NumberField("selected"),
-	"lastchg":        NumberField("lastChange"),
-	"lastsess":       NumberField("lastSession"),
-	"downtime":       NumberField("downtime"),
-	"check_status":   TextField("checkStatus"),
-	"check_duration": NumberField("checkDuration"),
-	"check_code":     NumberField("checkCode"),
+var Fields = FieldMap{
+	"svname": TextField("svname"),
+	"pxname": TextField("pxname"),
 }
 
 // New ..
