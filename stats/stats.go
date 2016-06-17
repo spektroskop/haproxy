@@ -9,11 +9,14 @@ import (
 	"time"
 )
 
-var transformers []func(Service) Service
+// TransformService ..
+var TransformService = func(svc Service) Service {
+	return svc
+}
 
-// AddTransformer ..
-func AddTransformer(transformer func(Service) Service) {
-	transformers = append(transformers, transformer)
+// TransformAll ..
+var TransformAll = func(svc Services) Services {
+	return svc
 }
 
 // Service ...
@@ -136,12 +139,8 @@ func FromReader(reader io.Reader) (Services, error) {
 			}
 		}
 
-		for _, transform := range transformers {
-			service = transform(service)
-		}
-
-		services = append(services, service)
+		services = append(services, TransformService(service))
 	}
 
-	return services, nil
+	return TransformAll(services), nil
 }
