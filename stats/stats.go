@@ -19,7 +19,7 @@ var TransformAll = func(svc Services) Services {
 	return svc
 }
 
-// Service ...
+// Service ..
 type Service map[string]interface{}
 
 // String ..
@@ -106,8 +106,10 @@ func New(mode, address string, timeout time.Duration) (Services, error) {
 		return nil, err
 	}
 	defer conn.Close()
+
 	conn.SetDeadline(time.Now().Add(timeout))
 	fmt.Fprintln(conn, "show stat")
+
 	return FromReader(conn)
 }
 
