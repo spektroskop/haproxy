@@ -52,14 +52,8 @@ type Field interface {
 	Value(string) (interface{}, error)
 }
 
-// FieldMap ..
-type FieldMap map[string]Field
-
 // TextField ..
 type TextField string
-
-// NumberField ..
-type NumberField string
 
 // Name ..
 func (f TextField) Name() string {
@@ -70,6 +64,9 @@ func (f TextField) Name() string {
 func (f TextField) Value(v string) (interface{}, error) {
 	return v, nil
 }
+
+// NumberField ..
+type NumberField string
 
 // Name ..
 func (f NumberField) Name() string {
@@ -131,7 +128,7 @@ func FromReader(reader io.Reader) ([]Service, error) {
 
 		service := make(Service)
 		for i, v := range record[:len(record)-1] {
-			if field, ok := Fields[names[i]]; ok {
+			if field, ok := fields[names[i]]; ok {
 				if value, err := field.Value(v); err == nil {
 					service[field.Name()] = value
 				}
