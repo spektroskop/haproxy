@@ -46,9 +46,6 @@ func (svc Service) Int(key string) (v int64) {
 	return
 }
 
-// Services ...
-type Services []Service
-
 // Field ..
 type Field interface {
 	Name() string
@@ -84,14 +81,23 @@ func (f NumberField) Value(v string) (interface{}, error) {
 	return strconv.ParseInt(v, 10, 64)
 }
 
-// Fields ..
-var Fields = FieldMap{
+// FieldMap ..
+type FieldMap map[string]Field
+
+var fields = FieldMap{
 	"svname": TextField("svname"),
 	"pxname": TextField("pxname"),
 }
 
+// SetFields ..
+func SetFields(m FieldMap) {
+	if m != nil {
+		fields = m
+	}
+}
+
 // New ..
-func New(mode, address string, timeout time.Duration) (Services, error) {
+func New(mode, address string, timeout time.Duration) ([]Service, error) {
 	conn, err := net.Dial(mode, address)
 	if err != nil {
 		return nil, err
@@ -105,7 +111,7 @@ func New(mode, address string, timeout time.Duration) (Services, error) {
 }
 
 // FromReader ..
-func FromReader(reader io.Reader) (Services, error) {
+func FromReader(reader io.Reader) ([]Service, error) {
 	reader.Read(make([]byte, 2))
 	cr := csv.NewReader(reader)
 
@@ -114,7 +120,7 @@ func FromReader(reader io.Reader) (Services, error) {
 		return nil, err
 	}
 
-	var services Services
+	var services []Service
 	for {
 		record, err := cr.Read()
 		if err == io.EOF {
