@@ -9,13 +9,25 @@ import (
 	"time"
 )
 
-// TransformService ..
-var TransformService = func(svc Service) Service {
+// SetServiceMapper ..
+func SetServiceMapper(m func(Service) Service) {
+	if m != nil {
+		serviceMapper = m
+	}
+}
+
+var serviceMapper = func(svc Service) Service {
 	return svc
 }
 
-// TransformAll ..
-var TransformAll = func(svc Services) Services {
+// SetMapper ..
+func SetMapper(m func([]Service) []Service) {
+	if m != nil {
+		mapper = m
+	}
+}
+
+var mapper = func(svc []Service) []Service {
 	return svc
 }
 
@@ -120,8 +132,8 @@ func FromReader(reader io.Reader) (Services, error) {
 			}
 		}
 
-		services = append(services, TransformService(service))
+		services = append(services, serviceMapper(service))
 	}
 
-	return TransformAll(services), nil
+	return mapper(services), nil
 }
