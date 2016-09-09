@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"net"
+	"os"
 	"strconv"
 	"time"
 )
@@ -105,6 +106,15 @@ func New(mode, address string, timeout time.Duration) ([]Service, error) {
 	fmt.Fprintln(conn, "show stat")
 
 	return FromReader(conn)
+}
+
+func FromFile(name string) ([]Service, error) {
+	reader, err := os.Open(name)
+	if err != nil {
+		return nil, err
+	}
+
+	return FromReader(reader)
 }
 
 // FromReader ..
