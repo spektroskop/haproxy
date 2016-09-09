@@ -1,4 +1,4 @@
-package stats
+package haproxy
 
 import (
 	"encoding/csv"
